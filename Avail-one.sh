@@ -48,32 +48,6 @@ exists() {
   command -v "$1" >/dev/null 2>&1
 }
 
-# 函数：安装依赖项（如果不存在）
-install_dependencies() {
-  local update_needed=0
-  local to_install=()
-
-  for dep in "$@"; do
-    if ! exists "$dep"; then
-      to_install+=("$dep")
-      update_needed=1
-    fi
-  done
-
-  if [ "$update_needed" -eq 1 ]; then
-    echo "更新软件包索引..."
-    sudo apt update -y
-    echo "安装依赖项：${to_install[*]}"
-    sudo apt install -y "${to_install[@]}"
-  else
-    echo "所有依赖项已安装。"
-  fi
-}
-
-# 安装必要的依赖项
-dependencies=(curl make clang pkg-config libssl-dev build-essential)
-install_dependencies "${dependencies[@]}"
-
 # 配置 systemd 服务文件
 tee /etc/systemd/system/availd.service > /dev/null << EOF
 [Unit]
